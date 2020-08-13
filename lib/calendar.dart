@@ -336,100 +336,102 @@ class CalendarChooseState extends State<CalendarChoose>
 
   Widget monthList(indexMonth) {
     return Container(
-      padding: EdgeInsets.only(bottom: 20),
-      child: AspectRatio(
-        aspectRatio: 0.81,
-        child: Column(
-          children: <Widget>[
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                if (widget.type == Calendar.BIRTHDAY) {
-                  _showBirthdayPastYearsModalSheet();
-                } else if (widget.type == Calendar.FUTUREYEARS) {
-                  _showFutureYearsModalSheet();
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    showMonthTitle(indexMonth),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    showYearTitle(indexMonth)
-                  ],
-                ),
+      padding: EdgeInsets.only( left: 15, right: 15),
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              if (widget.type == Calendar.BIRTHDAY) {
+                _showBirthdayPastYearsModalSheet();
+              } else if (widget.type == Calendar.FUTUREYEARS) {
+                _showFutureYearsModalSheet();
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  showMonthTitle(indexMonth),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  showYearTitle(indexMonth)
+                ],
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              height: 30,
-              child: Center(
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemExtent: (MediaQuery.of(context).size.width) / 7,
-                  itemCount: weeks.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        height: 30,
-                        child: Center(
-                            child: Text(
-                          "${weeks[index]}",
-                          style: TextStyle(
-                              color: Color(0xff626262),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        )));
-                  },
-                ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            height: 30,
+            child: Center(
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                itemExtent: (MediaQuery.of(context).size.width -30) / 7,
+                itemCount: weeks.length,
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                      height: 30,
+                      width: (MediaQuery.of(context).size.width) / 7,
+                      child: Center(
+                          child: Text(
+                        "${weeks[index]}",
+                        style: TextStyle(
+                            color: Color(0xff626262),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      )));
+                },
               ),
             ),
-            Expanded(
-              child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: daysOfMonth[indexMonth].length != 0
-                      ? daysOfMonth[indexMonth].length
-                      : 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7, mainAxisSpacing: 8.0),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () async {
-                          dateOnTapSelection(indexMonth, index);
-                        },
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.width,
+              maxWidth:MediaQuery.of(context).size.width
+            ),
+            child: GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: daysOfMonth[indexMonth].length != 0
+                    ? daysOfMonth[indexMonth].length
+                    : 0,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 7, mainAxisSpacing: 8.0),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      onTap: () async {
+                        dateOnTapSelection(indexMonth, index);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: daysOfMonth[indexMonth][index]
+                                .backgroundSelectedColor,
+                            borderRadius: daysOfMonth[indexMonth][index]
+                                .backgroundBorderRadius),
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: daysOfMonth[indexMonth][index]
-                                  .backgroundSelectedColor,
-                              borderRadius: daysOfMonth[indexMonth][index]
-                                  .backgroundBorderRadius),
-                          child: Container(
-                              height: 20,
-                              decoration: BoxDecoration(
+                            height: 20,
+                            decoration: BoxDecoration(
+                                color: daysOfMonth[indexMonth][index]
+                                    .selectedColor,
+                                borderRadius: daysOfMonth[indexMonth][index]
+                                    .borderRadius),
+                            child: Center(
+                                child: Text(
+                              "${daysOfMonth[indexMonth][index].day}",
+                              style: TextStyle(
                                   color: daysOfMonth[indexMonth][index]
-                                      .selectedColor,
-                                  borderRadius: daysOfMonth[indexMonth][index]
-                                      .borderRadius),
-                              child: Center(
-                                  child: Text(
-                                "${daysOfMonth[indexMonth][index].day}",
-                                style: TextStyle(
-                                    color: daysOfMonth[indexMonth][index]
-                                        .selectedTextColor,
-                                    fontSize: 14),
-                              ))),
-                        ));
-                  }),
-            ),
-          ],
-        ),
+                                      .selectedTextColor,
+                                  fontSize: 14),
+                            ))),
+                      ));
+                }),
+          ),
+        ],
       ),
     );
   }
