@@ -1,18 +1,20 @@
-/*
-Created by Yogesh Marathe
-date 19 august 2019
-description : holds the day each day details
- */
-
 import 'package:flutter/material.dart';
 
 class DayMonthDetailModel {
   dynamic day;
   int month, year;
   String weekDay;
-  BorderRadius borderRadius = BorderRadius.all(Radius.circular(30));
+  BorderRadius borderRadius = BorderRadius.all(Radius.circular(40));
+  BorderRadius backgroundBorderRadius = BorderRadius.all(Radius.circular(40));
   Color selectedColor = Colors.white;
+  Color backgroundSelectedColor = Colors.white;
   Color selectedTextColor = Colors.black;
+  @override
+  String toString() {
+    // TODO: implement toString
+
+    return DateTime(year, month, day).toString();
+  }
 }
 
 class TempMonthDetails{

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'calendar.dart';
 import 'day_details_model.dart';
@@ -76,7 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     strDate = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CalendarChoose.range()));
+                            builder: (context) => CalendarChoose.range(
+                                  innerRangeBackgroundColor: Color(0xffFFFAF3),
+                                  rangeStartEndBackgroundColor: Colors.red,
+                                selectionFontColor: Colors.black
+
+                                )));
                     if (strDate == null) strDate = "";
                   },
                   child: Text("Booking range")),

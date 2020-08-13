@@ -1,24 +1,18 @@
-/*
-Created by Yogesh Marathe
-date 19 august 2019
-description: nothing is impossible.
- */
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'day_details_model.dart';
 import 'scrolling_years_calendar.dart';
 
-class Calendar{
-  static String BIRTHDAY="birthday";
-  static String BOOKING="notrangebooking";
-  static String BOOKING_RANGE="inrangebooking";
-  static String FUTUREYEARS="futureyears";
+enum Calendar {
+  BIRTHDAY,
+  BOOKING,
+  BOOKING_RANGE,
+  FUTUREYEARS,
 }
 
 class CalendarChoose extends StatefulWidget {
-  String type;
+  Calendar type;
   Color currentDateBackgroundColor = Colors.redAccent;
   Color currentDateFontColor = Colors.black;
   Color rangeStartEndBackgroundColor;
@@ -26,7 +20,6 @@ class CalendarChoose extends StatefulWidget {
   Color selectionBackgroundColor = Colors.blue;
   Color selectionFontColor = Colors.white;
 
-//  CalendarChoose({this.type});
   CalendarChoose(this.type,
       {this.currentDateBackgroundColor = Colors.redAccent,
       this.currentDateFontColor = Colors.black,
@@ -37,7 +30,8 @@ class CalendarChoose extends StatefulWidget {
       {this.currentDateBackgroundColor = Colors.redAccent,
       this.currentDateFontColor,
       this.rangeStartEndBackgroundColor = Colors.blue,
-      this.innerRangeBackgroundColor = Colors.lightBlueAccent}) {
+      this.innerRangeBackgroundColor = Colors.lightBlueAccent,
+      this.selectionFontColor = Colors.white}) {
     type = Calendar.BOOKING_RANGE;
   }
 
@@ -52,7 +46,7 @@ class CalendarChooseState extends State<CalendarChoose>
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool rangeDate = false;
   VoidCallback _showPersBottomSheetCallBack;
-  List weeks = ["S", "M", "T", "W", "T", "F", "S"];
+  List weeks = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
   List days_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   List months = [
     "January",
@@ -219,7 +213,8 @@ class CalendarChooseState extends State<CalendarChoose>
           actions: <Widget>[
             GestureDetector(
                 onTap: () {
-                  Navigator.pop(context, selectedDate);
+                  print("startDate: " + daysOfMonth[startMonthIndex][startDayIndex].toString());
+                  print("endDate: " + daysOfMonth[endMonthIndex][endDayIndex].toString());
                 },
                 child: Image.asset(
                   "images/tick.png",
@@ -237,47 +232,17 @@ class CalendarChooseState extends State<CalendarChoose>
           color: Colors.white,
           child: Column(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(color: Color(0xfffB8B8B8)),
-                height: 30,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemExtent: MediaQuery.of(context).size.width / 7,
-                  itemCount: weeks.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                        height: 30,
-                        child: Center(
-                            child: Text(
-                          "${weeks[index]}",
-                          style: TextStyle(color: Colors.white),
-                        )));
-                  },
-                ),
-              ),
               Expanded(
-                child:
-//                ListView.separated(
-//                  controller: scrollController,
-//                  itemCount: daysOfMonth.length,
-//                  itemBuilder: (context, index) {
-//                    return Container(
-//                      height: 28 * daysOfMonth.length / 0.9,
-////                      height: 355,
-//                      child: monthList(index),
-//                    );
-//                  },
-//                  separatorBuilder: (BuildContext context, int index) {
-//                    return Divider();
-//                  },
-//                ),
-              CustomScrollView(controller:scrollController,slivers: <Widget>[
-                SliverList(delegate: SliverChildBuilderDelegate((context,index){
+                  child: CustomScrollView(
+                controller: scrollController,
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
                       return monthList(index);
-                },childCount:daysOfMonth.length ),)
-              ],)
-              ),
+                    }, childCount: daysOfMonth.length),
+                  )
+                ],
+              )),
             ],
           ),
         ));
@@ -300,117 +265,202 @@ class CalendarChooseState extends State<CalendarChoose>
     if (widget.type == Calendar.BIRTHDAY ||
         widget.type == Calendar.FUTUREYEARS) {
       return Text("${selectedYear}",
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold));
+          style: TextStyle(
+              color: Color(0xff626262),
+              fontSize: 16,
+              fontWeight: FontWeight.w500));
     } else if (widget.type == Calendar.BOOKING ||
         widget.type == Calendar.BOOKING_RANGE) {
       return Text("${tempMonths[index].year}",
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold));
+          style: TextStyle(
+              color: Color(0xff626262),
+              fontSize: 16,
+              fontWeight: FontWeight.w500));
     } else {
       return Text("null");
     }
   }
 
   Widget monthList(indexMonth) {
-    return Column(
-      children: <Widget>[
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            if (widget.type == Calendar.BIRTHDAY) {
-              _showBirthdayPastYearsModalSheet();
-            } else if (widget.type == Calendar.FUTUREYEARS) {
-              _showFutureYearsModalSheet();
-            }
-          },
-          child: Container(
-            margin: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                showMonthTitle(indexMonth),
-                SizedBox(
-                  width: 3,
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child: AspectRatio(
+        aspectRatio: 1.0,
+        child: Column(
+          children: <Widget>[
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (widget.type == Calendar.BIRTHDAY) {
+                  _showBirthdayPastYearsModalSheet();
+                } else if (widget.type == Calendar.FUTUREYEARS) {
+                  _showFutureYearsModalSheet();
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    showMonthTitle(indexMonth),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    showYearTitle(indexMonth)
+                  ],
                 ),
-                showYearTitle(indexMonth)
-              ],
+              ),
             ),
-          ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height / 2.3,
-          child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: daysOfMonth[indexMonth].length != 0
-                  ? daysOfMonth[indexMonth].length
-                  : 0,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 7),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                    onTap: () async {
-                      dateOnTapSelection(indexMonth, index);
-                    },
-                    child: Container(
-                        margin: EdgeInsets.all(3.0),
-                        decoration: BoxDecoration(
-                            color: daysOfMonth[indexMonth][index].selectedColor,
-                            borderRadius:
-                                daysOfMonth[indexMonth][index].borderRadius),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              height: 30,
+              child: Center(
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemExtent: (MediaQuery.of(context).size.width) / 7,
+                  itemCount: weeks.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        height: 30,
                         child: Center(
                             child: Text(
-                          "${daysOfMonth[indexMonth][index].day}",
+                          "${weeks[index]}",
                           style: TextStyle(
+                              color: Color(0xff626262),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        )));
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: daysOfMonth[indexMonth].length != 0
+                      ? daysOfMonth[indexMonth].length
+                      : 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 7, mainAxisSpacing: 8.0),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () async {
+                          dateOnTapSelection(indexMonth, index);
+                        },
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
                               color: daysOfMonth[indexMonth][index]
-                                  .selectedTextColor),
-                        ))));
-              }),
+                                  .backgroundSelectedColor,
+                              borderRadius: daysOfMonth[indexMonth][index]
+                                  .backgroundBorderRadius),
+                          child: Container(
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  color: daysOfMonth[indexMonth][index]
+                                      .selectedColor,
+                                  borderRadius: daysOfMonth[indexMonth][index]
+                                      .borderRadius),
+                              child: Center(
+                                  child: Text(
+                                "${daysOfMonth[indexMonth][index].day}",
+                                style: TextStyle(
+                                    color: daysOfMonth[indexMonth][index]
+                                        .selectedTextColor,
+                                    fontSize: 14),
+                              ))),
+                        ));
+                  }),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   void setColorToDay(indexMonth, index) {
     daysOfMonth[indexMonth][index].selectedColor =
         widget.rangeStartEndBackgroundColor;
+    daysOfMonth[indexMonth][index].backgroundSelectedColor =
+        widget.innerRangeBackgroundColor;
+
     daysOfMonth[indexMonth][index].selectedTextColor = Colors.white;
   }
 
   void setColorLightBlueToDay(indexMonth, index) {
     if (daysOfMonth[indexMonth][index].day != "") {
-      daysOfMonth[indexMonth][index].borderRadius =
-          BorderRadius.all(Radius.circular(10));
+      int beforeIndex = index - 1;
+      if (beforeIndex < 0) {
+        beforeIndex = 0;
+      }
+      int afterIndex = index + 1;
+      if (afterIndex > daysOfMonth[indexMonth].length - 1) {
+        afterIndex = daysOfMonth[indexMonth].length - 1;
+      }
+      if ([0, 7, 14, 21, 28].contains(index) ||
+          daysOfMonth[indexMonth][beforeIndex].day == "" ||
+          daysOfMonth[indexMonth][beforeIndex].day == null) {
+        daysOfMonth[indexMonth][index].borderRadius = BorderRadius.only(
+            topLeft: Radius.circular(30), bottomLeft: Radius.circular(30));
+      } else if ([6, 13, 20, 27, 34].contains(index) ||
+          index == afterIndex) {
+        daysOfMonth[indexMonth][index].borderRadius = BorderRadius.only(
+            topRight: Radius.circular(30), bottomRight: Radius.circular(30));
+      } else {
+        daysOfMonth[indexMonth][index].borderRadius =
+            BorderRadius.all(Radius.circular(0));
+      }
+
       daysOfMonth[indexMonth][index].selectedColor =
           widget.innerRangeBackgroundColor;
-      daysOfMonth[indexMonth][index].selectedTextColor = Colors.white;
+      daysOfMonth[indexMonth][index].selectedTextColor =
+          widget.selectionFontColor;
     }
   }
 
   void backToNormal(indexMonth, dayIndex) {
     daysOfMonth[indexMonth][dayIndex].selectedColor = Colors.white;
-    daysOfMonth[indexMonth][dayIndex].selectedTextColor = Colors.black;
+    daysOfMonth[indexMonth][dayIndex].selectedTextColor =
+        widget.selectionFontColor;
+    daysOfMonth[indexMonth][dayIndex].backgroundSelectedColor =
+        Colors.transparent;
     daysOfMonth[indexMonth][dayIndex].borderRadius =
+        BorderRadius.all(Radius.circular(30));
+    daysOfMonth[indexMonth][dayIndex].backgroundBorderRadius =
         BorderRadius.all(Radius.circular(30));
   }
 
   void showRangeSelection() {
+    print("startMonthIndex: "+ startMonthIndex.toString());
+    print("endMonthIndex: "+ endMonthIndex.toString());
+
     if (startMonthIndex == endMonthIndex) {
       /* birthday, future years, booking*/
       int tempDate = startDayIndex;
-      while (startDayIndex != endDayIndex) {
+      print("object");
+      while (tempDate != endDayIndex) {
         if (startDayIndex != tempDate)
-          setColorLightBlueToDay(startMonthIndex, startDayIndex);
+          setColorLightBlueToDay(startMonthIndex, tempDate);
         else {
-          daysOfMonth[startMonthIndex][startDayIndex].borderRadius =
+          daysOfMonth[startMonthIndex][tempDate].borderRadius =
               BorderRadius.only(
                   topLeft: Radius.circular(30),
                   bottomLeft: Radius.circular(30),
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10));
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30));
+          daysOfMonth[startMonthIndex][tempDate].backgroundBorderRadius =
+              BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  topRight: Radius.circular(0),
+                  bottomRight: Radius.circular(0));
         }
-        startDayIndex++;
+        tempDate++;
       }
     } else {
       /*booking_range*/
@@ -425,8 +475,14 @@ class CalendarChooseState extends State<CalendarChoose>
           daysOfMonth[tempStartMonthIndex][j].borderRadius = BorderRadius.only(
               topLeft: Radius.circular(30),
               bottomLeft: Radius.circular(30),
-              topRight: Radius.circular(10),
-              bottomRight: Radius.circular(10));
+              topRight: Radius.circular(30),
+              bottomRight: Radius.circular(30));
+        daysOfMonth[startMonthIndex][startDayIndex].backgroundBorderRadius =
+            BorderRadius.only(
+                topLeft: Radius.circular(30),
+                bottomLeft: Radius.circular(30),
+                topRight: Radius.circular(0),
+                bottomRight: Radius.circular(0));
       }
       tempStartMonthIndex = tempStartMonthIndex + 1;
 
@@ -484,10 +540,16 @@ class CalendarChooseState extends State<CalendarChoose>
                   "  ${daysOfMonth[indexMonth][index].day}/${daysOfMonth[indexMonth][index].month}/${daysOfMonth[indexMonth][index].year}";
               setColorToDay(indexMonth, index);
               daysOfMonth[indexMonth][index].borderRadius = BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                   bottomRight: Radius.circular(30));
+              daysOfMonth[indexMonth][index].backgroundBorderRadius =
+                  BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      bottomLeft: Radius.circular(0),
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30));
 
               showRangeSelection();
               tapIncrement = tapIncrement + 1;
@@ -530,8 +592,9 @@ class CalendarChooseState extends State<CalendarChoose>
           }
         }
       } else {
-        if (daysOfMonth[indexMonth][index].day != "" && daysOfMonth[indexMonth][index].selectedTextColor !=
-        Colors.black12) {
+        if (daysOfMonth[indexMonth][index].day != "" &&
+            daysOfMonth[indexMonth][index].selectedTextColor !=
+                Colors.black12) {
           daysOfMonth[indexMonth][index].selectedColor =
               widget.selectionBackgroundColor;
           daysOfMonth[indexMonth][index].selectedTextColor =
@@ -584,9 +647,9 @@ class CalendarChooseState extends State<CalendarChoose>
       localDMDM.year = year;
       DateTime eachDate = dateFormat.parse("$day-$indexMonth-$year");
       if (Calendar.BOOKING_RANGE == widget.type) {
-          if (eachDate.isBefore(DateTime.now())) {
-            localDMDM.selectedTextColor = Colors.black12;
-          }
+        if (eachDate.isBefore(DateTime.now())) {
+          localDMDM.selectedTextColor = Colors.black12;
+        }
       } else if (Calendar.BIRTHDAY == widget.type) {
         if (eachDate.isAfter(DateTime.now())) {
           localDMDM.selectedTextColor = Colors.black12;
