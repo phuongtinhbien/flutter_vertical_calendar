@@ -33,17 +33,20 @@ class CalendarChoose extends StatefulWidget {
   Function(DayMonthDetailModel, DayMonthDetailModel) onRangeDateChooseListen;
 
   CalendarChoose(this.type,
-      {this.currentDateBackgroundColor = Colors.redAccent,
+      {Key key,
+      this.currentDateBackgroundColor = Colors.redAccent,
       this.currentDateFontColor = Colors.black,
       this.selectionBackgroundColor = Colors.blue,
       this.selectionFontColor = Colors.white,
       this.weekDayString,
       this.onDateChooseListen,
       this.monthsString,
-      this.todayColor = Colors.red});
+      this.todayColor = Colors.red})
+      : super(key: key);
 
   CalendarChoose.range(
-      {this.currentDateBackgroundColor = Colors.redAccent,
+      {Key key,
+      this.currentDateBackgroundColor = Colors.redAccent,
       this.currentDateFontColor,
       this.rangeStartEndBackgroundColor = Colors.blue,
       this.innerRangeBackgroundColor = Colors.lightBlueAccent,
@@ -55,7 +58,8 @@ class CalendarChoose extends StatefulWidget {
       this.endDay,
       this.todayColor = Colors.red,
       @required this.initStartDay,
-      this.initEndDay}) {
+      this.initEndDay})
+      : super(key: key) {
     type = Calendar.BOOKING_RANGE;
   }
 
@@ -336,7 +340,7 @@ class CalendarChooseState extends State<CalendarChoose>
 
   Widget monthList(indexMonth) {
     return Container(
-      padding: EdgeInsets.only( left: 15, right: 15),
+      padding: EdgeInsets.only(left: 15, right: 15),
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -370,7 +374,7 @@ class CalendarChooseState extends State<CalendarChoose>
             child: Center(
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
-                itemExtent: (MediaQuery.of(context).size.width -30) / 7,
+                itemExtent: (MediaQuery.of(context).size.width - 30) / 7,
                 itemCount: weeks.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
@@ -392,9 +396,8 @@ class CalendarChooseState extends State<CalendarChoose>
           ),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.width,
-              maxWidth:MediaQuery.of(context).size.width
-            ),
+                maxHeight: MediaQuery.of(context).size.width,
+                maxWidth: MediaQuery.of(context).size.width),
             child: GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: daysOfMonth[indexMonth].length != 0
