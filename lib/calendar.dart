@@ -743,25 +743,25 @@ class CalendarChooseState extends State<CalendarChoose>
         startDayIndex = daysOfMonth[startMonthIndex]
             .indexWhere((element) => element.day == startDay.day);
 
-
-      //init end day in range
-      if (endDay != null) {
-        endMonthIndex = tempMonths
-            .indexWhere((element) => element.month == months[endDay.month - 1]);
-        endDayIndex = daysOfMonth[endMonthIndex]
-            .indexWhere((element) => element.day == endDay.day);
+        //init end day in range
+        if (endDay != null) {
+          endMonthIndex = tempMonths.indexWhere(
+              (element) => element.month == months[endDay.month - 1]);
+          endDayIndex = daysOfMonth[endMonthIndex]
+              .indexWhere((element) => element.day == endDay.day);
+        }
       }
+
+      setState(() {
+        if (startDay != null) {
+          dateOnTapSelection(startMonthIndex, startDayIndex);
+        }
+        //init end day in range
+        if (endDay != null) {
+          dateOnTapSelection(endMonthIndex, endDayIndex);
+        }
+      });
     }
-
-    setState(() {
-      if (startDay != null) {
-        dateOnTapSelection(startMonthIndex, startDayIndex);
-      }
-      //init end day in range
-      if (endDay != null) {
-        dateOnTapSelection(endMonthIndex, endDayIndex);
-      }
-    });
   }
 
   int dayOfWeek(int d, int m, int y) {
