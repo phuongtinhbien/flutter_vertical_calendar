@@ -742,7 +742,8 @@ class CalendarChooseState extends State<CalendarChoose>
             (element) => element.month == months[startDay.month - 1]);
         startDayIndex = daysOfMonth[startMonthIndex]
             .indexWhere((element) => element.day == startDay.day);
-      }
+
+
       //init end day in range
       if (endDay != null) {
         endMonthIndex = tempMonths
