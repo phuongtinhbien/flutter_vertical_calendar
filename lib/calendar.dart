@@ -761,12 +761,15 @@ class CalendarChooseState extends State<CalendarChoose>
       setState(() {
         if (startDay != null) {
           dateOnTapSelection(startMonthIndex, startDayIndex);
-          scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
+
         }
         //init end day in range
         if (endDay != null) {
           dateOnTapSelection(endMonthIndex, endDayIndex);
         }
+      });
+      setState(() {
+        scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
       });
     }
   }
