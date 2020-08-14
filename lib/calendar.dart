@@ -158,6 +158,7 @@ class CalendarChooseState extends State<CalendarChoose>
     print("endMonthIndex: " + endMonthIndex.toString());
     print("endMonthIndex: " + endMonthIndex.toString());
     onSetRangeDate();
+    scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width);
   }
 
   void bookingCalendarLogic() {
