@@ -771,6 +771,14 @@ class CalendarChooseState extends State<CalendarChoose>
         }
       });
 
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          if (Calendar.BOOKING_RANGE == widget.type ||
+              Calendar.BOOKING != widget.type) {}
+          scrollController.jumpTo(currentMonth * MediaQuery.of(context).size.width);
+        });
+      });
+
 //        localDMDM.selectedColor = widget.currentDateBackgroundColor;
 //        localDMDM.selectedTextColor = widget.currentDateFontColor;
 
