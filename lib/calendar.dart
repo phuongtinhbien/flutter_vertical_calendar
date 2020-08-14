@@ -139,9 +139,9 @@ class CalendarChooseState extends State<CalendarChoose>
     }
     SchedulerBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        if (Calendar.BOOKING_RANGE != widget.type ||
+        if (Calendar.BOOKING_RANGE == widget.type ||
             Calendar.BOOKING != widget.type) {}
-        scrollController.jumpTo(currentMonth * 300);
+        scrollController.jumpTo(currentMonth * MediaQuery.of(context).size.width);
       });
     });
     _showPersBottomSheetCallBack = _showBottomSheet;
@@ -725,9 +725,10 @@ class CalendarChooseState extends State<CalendarChoose>
 
       // current date start
 //      if (DateTime.now().month == indexMonth && DateTime.now().day == day) {
-//        localDMDM.selectedColor = widget.currentDateBackgroundColor;
-//        localDMDM.selectedTextColor = widget.currentDateFontColor;
+////        localDMDM.selectedColor = widget.currentDateBackgroundColor;
+////        localDMDM.selectedTextColor = widget.currentDateFontColor;
 //        currentMonth = indexMonth.toDouble();
+//        print("currentMonth: "+ currentMonth.toString());
 //      }
       //current date end
 
@@ -761,16 +762,21 @@ class CalendarChooseState extends State<CalendarChoose>
       setState(() {
         if (startDay != null) {
           dateOnTapSelection(startMonthIndex, startDayIndex);
-
+          currentMonth = startMonthIndex.toDouble() + 1.0;
+          print("currentMonth: "+ currentMonth.toString());
         }
         //init end day in range
         if (endDay != null) {
           dateOnTapSelection(endMonthIndex, endDayIndex);
         }
       });
-      setState(() {
-        scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
-      });
+
+//        localDMDM.selectedColor = widget.currentDateBackgroundColor;
+//        localDMDM.selectedTextColor = widget.currentDateFontColor;
+
+//      setState(() {
+//        scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
+//      });
     }
   }
 

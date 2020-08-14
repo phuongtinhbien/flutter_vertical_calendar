@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   innerRangeBackgroundColor: Color(0xffFFFAF3),
                                   rangeStartEndBackgroundColor: Colors.red,
                                 selectionFontColor: Colors.black,
-                                initStartDay: DayMonthDetailModel(day: 20, month: 8, year: 2020),
+                                initStartDay: DayMonthDetailModel(day: 20, month: 1, year: 2020),
                                 startDay: DayMonthDetailModel(day: 20, month: 8, year: 2020),
                                 endDay: DayMonthDetailModel(day: 30, month: 8, year: 2020),
                               onRangeDateChooseListen: (a, b){
