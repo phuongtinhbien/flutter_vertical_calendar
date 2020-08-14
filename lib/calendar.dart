@@ -741,20 +741,25 @@ class CalendarChooseState extends State<CalendarChoose>
   }
 
   void onSetRangeDate() {
-    var startMonthIndex, startDayIndex, endMonthIndex, endDayIndex;
     if (Calendar.BOOKING_RANGE == widget.type) {
       if (startDay != null) {
-        startMonthIndex = tempMonths.indexWhere(
-            (element) => element.month == months[startDay.month - 1]);
-        startDayIndex = daysOfMonth[startMonthIndex]
-            .indexWhere((element) => element.day == startDay.day);
+        setState(() {
+          startMonthIndex = tempMonths.indexWhere(
+                  (element) => element.month == months[startDay.month - 1]);
+          startDayIndex = daysOfMonth[startMonthIndex]
+              .indexWhere((element) => element.day == startDay.day);
+        });
+
 
         //init end day in range
         if (endDay != null) {
-          endMonthIndex = tempMonths.indexWhere(
-              (element) => element.month == months[endDay.month - 1]);
-          endDayIndex = daysOfMonth[endMonthIndex]
-              .indexWhere((element) => element.day == endDay.day);
+          setState(() {
+            endMonthIndex = tempMonths.indexWhere(
+                    (element) => element.month == months[endDay.month - 1]);
+            endDayIndex = daysOfMonth[endMonthIndex]
+                .indexWhere((element) => element.day == endDay.day);
+          });
+
         }
       }
 
