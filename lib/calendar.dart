@@ -158,7 +158,7 @@ class CalendarChooseState extends State<CalendarChoose>
     print("endMonthIndex: " + endMonthIndex.toString());
     print("endMonthIndex: " + endMonthIndex.toString());
     onSetRangeDate();
-    scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
+
   }
 
   void bookingCalendarLogic() {
@@ -741,31 +741,27 @@ class CalendarChooseState extends State<CalendarChoose>
   }
 
   void onSetRangeDate() {
+    var startMonthIndex, startDayIndex, endMonthIndex, endDayIndex;
     if (Calendar.BOOKING_RANGE == widget.type) {
       if (startDay != null) {
-        setState(() {
-          startMonthIndex = tempMonths.indexWhere(
-                  (element) => element.month == months[startDay.month - 1]);
-          startDayIndex = daysOfMonth[startMonthIndex]
-              .indexWhere((element) => element.day == startDay.day);
-        });
-
+        startMonthIndex = tempMonths.indexWhere(
+            (element) => element.month == months[startDay.month - 1]);
+        startDayIndex = daysOfMonth[startMonthIndex]
+            .indexWhere((element) => element.day == startDay.day);
 
         //init end day in range
         if (endDay != null) {
-          setState(() {
-            endMonthIndex = tempMonths.indexWhere(
-                    (element) => element.month == months[endDay.month - 1]);
-            endDayIndex = daysOfMonth[endMonthIndex]
-                .indexWhere((element) => element.day == endDay.day);
-          });
-
+          endMonthIndex = tempMonths.indexWhere(
+              (element) => element.month == months[endDay.month - 1]);
+          endDayIndex = daysOfMonth[endMonthIndex]
+              .indexWhere((element) => element.day == endDay.day);
         }
       }
 
       setState(() {
         if (startDay != null) {
           dateOnTapSelection(startMonthIndex, startDayIndex);
+          scrollController.jumpTo(startMonthIndex * MediaQuery.of(context).size.width );
         }
         //init end day in range
         if (endDay != null) {
