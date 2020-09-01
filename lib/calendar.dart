@@ -784,6 +784,9 @@ class CalendarChooseState extends State<CalendarChoose>
       if (startDay != null) {
         startMonthIndex = tempMonths.indexWhere(
                 (element) => element.month == months[startDay.month - 1]);
+        if (startMonthIndex < 0){
+          startMonthIndex = 0;
+        }
         startDayIndex = daysOfMonth[startMonthIndex]
             .indexWhere((element) => element.day == startDay.day);
 
@@ -791,6 +794,9 @@ class CalendarChooseState extends State<CalendarChoose>
         if (endDay != null) {
           endMonthIndex = tempMonths.indexWhere(
                   (element) => element.month == months[endDay.month - 1]);
+          if (endMonthIndex < 0){
+            endMonthIndex = 0;
+          }
           endDayIndex = daysOfMonth[endMonthIndex]
               .indexWhere((element) => element.day == endDay.day);
         }
