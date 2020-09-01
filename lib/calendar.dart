@@ -789,6 +789,9 @@ class CalendarChooseState extends State<CalendarChoose>
         }
         startDayIndex = daysOfMonth[startMonthIndex]
             .indexWhere((element) => element.day == startDay.day);
+        if (startDayIndex <0){
+          startDayIndex = 0;
+        }
 
         //init end day in range
         if (endDay != null) {
@@ -799,6 +802,9 @@ class CalendarChooseState extends State<CalendarChoose>
           }
           endDayIndex = daysOfMonth[endMonthIndex]
               .indexWhere((element) => element.day == endDay.day);
+          if (endDayIndex <0){
+            endDayIndex = 0;
+          }
         }
       }
 
